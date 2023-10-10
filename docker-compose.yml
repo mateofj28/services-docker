@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  # Contenedor para la base de datos MongoDB
+  mongodb:
+    image: mongo
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb-data:/data/db
+
+  # Contenedor para la aplicación Node.js
+  app:
+    build:
+      context: . # Usa el contexto actual (donde se encuentra el Dockerfile)
+    container_name: node-app
+    ports:
+      - "3000:3000"
+    depends_on:
+      - mongodb
+    links:
+      - mongodb
+    environment:
+      MONGO_URI: mongodb://mongodb:27017/mi-base-de-datos 
+
+volumes:
+  mongodb-data:
